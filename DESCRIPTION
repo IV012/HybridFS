@@ -5,6 +5,6 @@ Version: 0.1.0
 Author: Yifan Dai, Fei Zou, Baiming Zou
 Maintainer: Yifan Dai <yf-dai_thu@outlook.com>
 Description: This package implements the algorithm of HFS and HiFIT in the paper "High-Dimensional Feature Importance Test for Scalable and Interpretable Disease Prediction via Machine Learning Models".
-License: MIT License
+License: GPLv3
 Encoding: UTF-8
 LazyData: true
