@@ -24,7 +24,9 @@ devtools::install_github("IV012/HybridFS")
 
 ### Related Pages
 
-- [Deep Treatment Learning](https://github.com/SkadiEye/deepTL/tree/master) by Xinlei Mi
+- [Simulation Studies and Real Data Analysis](https://github.com/IV012/HiFIT) using `HybridFS`
+
+- [Deep Treatment Learning](https://github.com/SkadiEye/deepTL/tree/master)
 
 ### References
 
