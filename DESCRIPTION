@@ -1,10 +1,14 @@
 Package: HybridFS
 Type: Package
-Title: Hybrid Feature Screening and High-Dimensional Feature Importance Test
+Title: Hybrid Feature Screening (HFS) and High-Dimensional Feature Importance Test (HiFIT)
 Version: 0.1.0
-Author: Yifan Dai, Fei Zou, Baiming Zou
-Maintainer: Yifan Dai <yf-dai_thu@outlook.com>
-Description: This package implements the algorithm of HFS and HiFIT in the paper "High-Dimensional Feature Importance Test for Scalable and Interpretable Disease Prediction via Machine Learning Models".
-License: GPLv3
+Author: Yifan Dai
+Maintainer: Yifan Dai <yfd@unc.edu>
+Description: This R package implements: 
+  1. HFS, an efficient nonlinear feature screening method using multiple utilities.
+  2. HiFIT, a high-dimensional feature importance testing via machine learning models.
+License: GPL (>= 2)
 Encoding: UTF-8
+Depends: R (>= 4.0.0), methods, e1071, glmnet, randomForest, xgboost, foreach, parallel, doParallel, dHSIC, isotree
 LazyData: true
+RoxygenNote: 7.3.1
