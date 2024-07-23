@@ -2,9 +2,10 @@
 
 ### Description
 
-This R package implements: 
+This R package features: 
   1. HFS, an efficient nonlinear feature screening method using multiple utilities.
   2. HiFIT, a high-dimensional feature importance testing via machine learning models.
+
 
 ### Minimal Requirement
 
@@ -16,7 +17,8 @@ This R package implements:
 
 ### Installation
 
-```{r}
+``` r
+install.packages("devtools")
 devtools::install_github("IV012/HybridFS")
 ```
 
