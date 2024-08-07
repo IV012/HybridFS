@@ -43,6 +43,8 @@ hifit <- function(X, y, k_fold = 5,
                     shuffle = NULL, utilities = list(),
                     M = 3, alpha = 0.1, prop = 0.9,
                     isAll=FALSE, ...) {
+  X <- as.matrix(X)
+  y <- as.vector(y)
   n <- dim(X)[1]
   p <- dim(X)[2]
   if (n != length(y)){
@@ -55,6 +57,7 @@ hifit <- function(X, y, k_fold = 5,
   valid_ind <- list()
 
   if (is.null(shuffle)) shuffle <- sample(n)
+  if (is.null(active_var)) active_var <- seq(p)
 
   for (j in 1:k_fold){
     for(k in 1:2){
@@ -72,7 +75,7 @@ hifit <- function(X, y, k_fold = 5,
       feature.keep <- hfs.object$idx
       val_idx <- which(seq(dim(X)[1])[-val.2] %in% val.1)
       try(tau.object <- tune.tau(X=X[-val.2, ], y=y[-val.2],
-            hfs.object=hfs.object,
+            object=hfs.object,
             val_idx=val_idx, mod_fun=mod_fun,
             predict_fun=predict_fun, method=method,
             alpha=alpha, prop=prop, isAll=isAll, ...))

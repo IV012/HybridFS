@@ -1,7 +1,7 @@
 Package: HybridFS
 Type: Package
 Title: Hybrid Feature Screening (HFS) and High-Dimensional Feature Importance Test (HiFIT)
-Version: 0.1.0
+Version: 0.1.1
 Author: Yifan Dai
 Maintainer: Yifan Dai <yfd@unc.edu>
 Description: This R package implements: 
