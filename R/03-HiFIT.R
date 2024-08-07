@@ -25,7 +25,8 @@
 #' @param isAll Adopt stricter screening standard. Default FALSE.
 #' @param ... Additional parameters passed to each method.
 #'
-#' @return Returns a PermFIT object.
+#' @return A list of \code{importance}, \code{block_importance},
+#'    \code{validation_index}, and \code{y_hat}.
 #'
 #' @importFrom stats sd
 #' @importFrom stats pnorm
@@ -50,9 +51,9 @@ hifit <- function(X, y, k_fold = 5,
   if (n != length(y)){
     stop("The number of rows of X should be equal to the length of y.")
   }
-  n_pathway <- ifelse(length(pathway_list) > 0, length(pathway_list), 1)
-  p_score <- array(NA, dim = c(n_perm, n, p))
-  p_score2 <- array(NA, dim = c(n_perm, n, n_pathway))
+  n_pathway <- length(pathway_list)
+  p_score <- array(NA, dim = c(n_perm, n, n_pathway))
+  p_score2 <- array(NA, dim = c(n_perm, n, p))
   y_pred <- rep(NA, n)
   valid_ind <- list()
 
@@ -95,15 +96,14 @@ hifit <- function(X, y, k_fold = 5,
                                 pathway_list = pathway_list,
                                 active_var = NULL, method=method,
                                 shuffle = shuffle, ...)
-
       p_score2[,val.2,feature.keep] <- perm_mod$p_score2
       if (length(pathway_list) > 0) {
         p_score[,val.2,] <- perm_mod$p_score
       }
-      y_pred[, val.2] <- perm_mod$y_pred
+      y_pred[val.2] <- perm_mod$y_pred
     }
   }
-  
+
   if(is.null(colnames(X))) {
     imp <- data.frame(var_name = paste0("V", 1:p))
   } else  {
@@ -114,20 +114,19 @@ hifit <- function(X, y, k_fold = 5,
                     function(x) sqrt(stats::var(x, na.rm=TRUE)/sum(!is.na(x))))
   imp$importance_pval <- 1 - stats::pnorm(imp$importance/imp$importance_sd)
   if(n_perm > 1) {
-    imp$importance_sd_x <- apply(apply(p_score2, c(1, 3), mean), 2, stats::sd, na.rm = TRUE)
+    imp$importance_sd_x <- apply(apply(p_score2, c(1, 3), mean, na.rm = TRUE), 2, stats::sd, na.rm = TRUE)
     imp$importance_pval_x <- 1 - stats::pnorm(imp$importance/imp$importance_sd_x)
   }
-  
   imp_block <- data.frame()
   if(n_pathway >= 1) {
-    
+
     if(is.null(names(pathway_list))) {
       imp_block <- data.frame(block = paste0("P", 1:n_pathway))
     } else {
       imp_block <- data.frame(block = names(pathway_list))
     }
     imp_block$importance <- apply(apply(p_score, 2:3, mean), 2, mean, na.rm = TRUE)
-    imp_blokc$importance_sd <- apply(apply(p_score2, 2:3, mean), 2,
+    imp_block$importance_sd <- apply(apply(p_score2, 2:3, mean), 2,
                     function(x) sqrt(stats::var(x, na.rm=TRUE)/sum(!is.na(x))))
     imp_block$importance_pval <- 1 - stats::pnorm(imp_block$importance/imp_block$importance_sd)
     if(n_perm > 1) {
@@ -135,6 +134,6 @@ hifit <- function(X, y, k_fold = 5,
       imp_block$importance_pval_x <- 1 - stats::pnorm(imp_block$importance/imp_block$importance_sd_x)
     }
   }
-  return(new("PermFIT", model = NULL, importance = imp, block_importance = imp_block,
+  return(list(importance = imp, block_importance = imp_block,
              validation_index = valid_ind, y_hat = y_pred))
 }

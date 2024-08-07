@@ -27,6 +27,9 @@ hybrid.corr <- function(X, y, tau=0.5, prop=0.9, isAll=FALSE, utilities=list(), 
     stop("The length of y does not match the row number of X")
   }
   p <- dim(X)[2]
+  if (p < 10){
+    stop("Too few features as input. HFS accepts at least 10 features.")
+  }
   v <- length(utilities)
   type <- ifelse(length(unique(y))==2, "binary-classification", "regression")
 
@@ -78,6 +81,9 @@ hybrid.corr <- function(X, y, tau=0.5, prop=0.9, isAll=FALSE, utilities=list(), 
     cond <- apply(corrs, 1, function(x) TRUE %in% c(x>=cutoff))
   }
   idx <- which(cond == TRUE & score >= tau)
+  if (length(idx) <= 10){
+    idx <- which(rank(-score) <= 10)
+  }
   return(list(idx=idx, corrs=corrs, score=score, type=type))
 }
 
@@ -116,6 +122,9 @@ tune.tau <- function(X, y, object, val_idx = NULL,
                      alpha = 0.1, prop = 0.95, isAll = FALSE, ...){
   if (length(tau_set) <= 1) {
     stop("The function 'tune.tau' only accept multiple taus. Please use 'hybridFS' instead.")
+  }
+  if (dim(X)[2] < 10){
+    stop("Too few features as input. HFS accepts at least 10 features.")
   }
   tau_set <- unique(tau_set[order(tau_set)])
   # split the data into training and testing sets
@@ -179,5 +188,8 @@ tune.tau <- function(X, y, object, val_idx = NULL,
     tau.best <- max(tau_set)
   }
   idx <- fea_idx[which(score >= tau.best)]
+  if (length(idx) <= 10){
+    idx <- which(rank(-score) <= 10)
+  }
   return(list(idx=idx, tau.best=tau.best, hfs.object=object, method=method))
 }
